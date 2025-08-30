@@ -1,0 +1,3156 @@
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local loadingScreen = Instance.new("ScreenGui")
+loadingScreen.IgnoreGuiInset = true
+loadingScreen.ResetOnSpawn = false
+loadingScreen.Name = "DiamondLoading"
+loadingScreen.Parent = playerGui
+
+local background = Instance.new("Frame")
+background.Size = UDim2.new(1, 0, 1, 0)
+background.Position = UDim2.new(0, 0, 0, 0)
+background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+background.BorderSizePixel = 0
+background.Parent = loadingScreen
+
+local mainText = Instance.new("TextLabel")
+mainText.Size = UDim2.new(0, 400, 0, 100)
+mainText.Position = UDim2.new(0.5, -200, 0.5, -80)
+mainText.BackgroundTransparency = 1
+mainText.Text = "Diamond Hub"
+mainText.Font = Enum.Font.GothamBlack
+mainText.TextSize = 48
+mainText.TextColor3 = Color3.new(1, 1, 1)
+mainText.TextStrokeTransparency = 0.8
+mainText.Parent = loadingScreen
+
+local subText = Instance.new("TextLabel")
+subText.Size = UDim2.new(0, 200, 0, 40)
+subText.Position = UDim2.new(0.5, -100, 0.5, 20)
+subText.BackgroundTransparency = 1
+subText.Text = "Loading..."
+subText.Font = Enum.Font.GothamBlack
+subText.TextSize = 24
+subText.TextColor3 = Color3.new(1, 1, 1)
+subText.TextStrokeTransparency = 0.8
+subText.Parent = loadingScreen
+
+task.delay(6, function()
+    loadingScreen:Destroy()
+end)
+
+task.wait(2) -- Wait for WindUI to load
+
+
+WindUI:SetNotificationLower(true)
+
+WindUI:SetFont("rbxasset://fonts/families/Roboto.json")
+
+task.wait(4) 
+WindUI:SetTheme("Violet")
+
+local generatorHighlightColor = Color3.fromRGB(255, 0, 0)
+local toolHighlightColor = Color3.fromRGB(0, 0, 255)
+local survivorHighlightColor = Color3.fromRGB(0, 255, 0)
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local windUI = playerGui:FindFirstChild("WindUI", true)
+local windMain = windUI and windUI:FindFirstChildWhichIsA("ScreenGui", true)
+
+-- Hide original open buttons
+if windUI then
+    for _, obj in ipairs(windUI:GetDescendants()) do
+        if obj:IsA("TextButton") and string.lower(obj.Text):find("open") then
+            obj.Visible = false
+        end
+    end
+end
+
+-- Create a new small draggable square button
+local toggleButton = Instance.new("ImageButton")
+toggleButton.Name = "WindUIToggle"
+toggleButton.Size = UDim2.new(0, 40, 0, 40)
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Image = "https://i.postimg.cc/P5cZCD9z/images-11.jpg" 
+toggleButton.Parent = playerGui
+
+-- Make it draggable
+local dragging, dragStart, startPos
+
+toggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = toggleButton.Position
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+-- Toggle WindUI visibility
+toggleButton.MouseButton1Click:Connect(function()
+    if windMain then
+        windMain.Enabled = not windMain.Enabled
+    end
+end)
+
+
+local aimbot1x1sounds = {
+    "rbxassetid://79782181585087",
+    "rbxassetid://128711903717226"
+}
+
+local chanceaimbotsounds = {
+    "rbxassetid://201858045",
+    "rbxassetid://139012439429121"
+}
+
+local johnaimbotsounds = {
+    "rbxassetid://109525294317144"
+}
+
+local jasonaimbotsounds = {
+    "rbxassetid://112809109188560",
+    "rbxassetid://102228729296384"
+}
+
+local shedaimbotsounds = {
+    "rbxassetid://12222225",
+    "rbxassetid://83851356262523"
+}
+
+local guestsounds = {
+    "rbxassetid://609342351"
+}
+
+local AnimToBlock = {
+        "rbxassetid://131430497821198", "rbxassetid://83829782357897", "rbxassetid://126830014841198",
+        "rbxassetid://126355327951215", "rbxassetid://121086746534252", "rbxassetid://105458270463374",
+        "rbxassetid://127172483138092", "rbxassetid://18885919947", "rbxassetid://18885909645",
+        "rbxassetid://87259391926321", "rbxassetid://106014898528300", "rbxassetid://86545133269813",
+        "rbxassetid://89448354637442", "rbxassetid://90499469533503", "rbxassetid://116618003477002",
+        "rbxassetid://106086955212611", "rbxassetid://107640065977686", "rbxassetid://77124578197357",
+        "rbxassetid://101771617803133", "rbxassetid://134958187822107", "rbxassetid://111313169447787",
+        "rbxassetid://71685573690338", "rbxassetid://129843313690921", "rbxassetid://97623143664485",
+        "rbxassetid://136007065400978", "rbxassetid://86096387000557", "rbxassetid://108807732150251",
+        "rbxassetid://138040001965654", "rbxassetid://73502073176819", "rbxassetid://86709774283672",
+        "rbxassetid://140703210927645", "rbxassetid://96173857867228", "rbxassetid://121255898612475",
+        "rbxassetid://98031287364865", "rbxassetid://119462383658044", "rbxassetid://77448521277146",
+        "rbxassetid://103741352379819", "rbxassetid://131696603025265", "rbxassetid://122503338277352",
+        "rbxassetid://97648548303678", "rbxassetid://94162446513587", "rbxassetid://84426150435898",
+        "rbxassetid://93069721274110", "rbxassetid://114620047310688", "rbxassetid://97433060861952",
+        "rbxassetid://82183356141401", "rbxassetid://100592913030351", "rbxassetid://121293883585738",
+        "rbxassetid://70447634862911", "rbxassetid://92173139187970", "rbxassetid://106847695270773",
+        "rbxassetid://125403313786645", "rbxassetid://81639435858902", "rbxassetid://137314737492715",
+        "rbxassetid://120112897026015", "rbxassetid://82113744478546", "rbxassetid://118298475669935",
+        "rbxassetid://126681776859538", "rbxassetid://129976080405072", "rbxassetid://109667959938617",
+        "rbxassetid://74707328554358", "rbxassetid://133336594357903", "rbxassetid://86204001129974",
+        "rbxassetid://124243639579224", "rbxassetid://70371667919898", "rbxassetid://131543461321709",
+        "rbxassetid://136323728355613", "rbxassetid://109230267448394"
+}
+local isHighlightActive = false
+
+local toolhighlightactive = false
+
+
+local isCorruptNatureEspActive = false
+
+local isSurvivorUtilEspActive = false
+
+
+local isSurvivorHighlightActive = false
+
+local givepizza = false
+
+local connections = {}
+
+local isKillerHighlightActive = false
+
+local VirtualBallsManager = game:GetService('VirtualInputManager')
+
+local player = game.Players.LocalPlayer
+
+local aimbot1x1 = false
+
+local johnaim = false
+
+local connection
+
+local jasonaim = false
+
+local shedaim = false
+
+local guestaim = false
+
+local CustomChar = false
+
+local jumppowerenabled = false
+
+local YutaActive = false
+
+local CrosshairVisible = false
+
+local IsForceLagEnabled = false
+
+local IsWatchtowerActive = false
+
+local IsEndlessStaminaActive = false
+
+local BigAhhHitbox = false
+
+local NoSlowness = false
+
+local IsTwoTimeBackstabDetectorActive = false
+
+local AutoParryActive = false
+
+local BackstabActive = false 
+
+local TweenToSpawnEnabled = false
+
+local isDodging = false
+
+local KillerAutoFarm = false
+
+local AutoFarmSurvivorsActive = false
+
+local previousState = false 
+
+local AutoPopUp = false
+
+local AutoTakePizza = false
+
+local survivorutil = {
+    "007n7",
+    "BuildermanSentry",
+    "BuildermanDispenser",
+    "Pizza",
+    "BuildermanSentryEffectRange"
+}
+
+local Window = WindUI:CreateWindow({
+    Title = "Diamond Hub | Forsaken",
+    Icon = "gem",
+    Author = "Made By Kiro",
+    Folder = "DiamondHubOp",
+    Size = UDim2.fromOffset(400, 230),
+    Transparent = true,
+    Theme = "Violet",--balls hurt
+    SideBarWidth = 200,
+    Background = "",
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            print("clicked")
+        end,
+    },
+    KeySystem = {
+        Key = { "22", "yes you sigma" },
+        Note = "2 plus 2 (22)?",
+        Thumbnail = {
+            Image = "rbxassetid://",
+            Title = "Sigma",
+        },
+        URL = "22",
+        SaveKey = true,
+    },
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local ScreenGui = Instance.new("ScreenGui")
+local StopButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+StopButton.Parent = ScreenGui
+StopButton.Size = UDim2.new(0,100,0,40)
+StopButton.Position = UDim2.new(0.5,-50,0.9,0)
+StopButton.BackgroundColor3 = Color3.fromRGB(255,0,0)
+StopButton.Text = "STOP"
+StopButton.TextColor3 = Color3.fromRGB(255,255,255)
+StopButton.Visible = false
+
+local function AutoFarmSurvivors(state)
+    AutoFarmSurvivorsActive = state
+    local debounce = {}
+
+    if state then
+        StopButton.Visible = true
+        run = true
+        do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3" local f="tmp_github_sound.mp3" writefile(f,game:HttpGet(url)) local s=Instance.new("Sound",workspace) s.SoundId=(getcustomasset or getsynasset)(f) s.Volume=10 s:Play() WindUI:Notify({Title="INFORMATION",Content="Auto Farm survivors enabled!! (Highly banable)",Duration=3,Icon="info"}) end
+    end
+
+    local function pressE(holdTime)
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, nil)
+        task.wait(holdTime)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, nil)
+    end
+
+    local function tweenTo(pos)
+        local char = LocalPlayer.Character
+        if not char then return end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        if activeTween then activeTween:Cancel() end
+
+        activeTween = TweenService:Create(hrp, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {CFrame = CFrame.new(pos)})
+        activeTween:Play()
+        activeTween.Completed:Wait()
+    end
+
+    local function isDoingGen()
+        local char = LocalPlayer.Character
+        if not char then return false end
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return false end
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            if track.Animation.AnimationId == "rbxassetid://"..GEN_ANIMATION_ID then
+                return true
+            end
+        end
+        return false
+    end
+
+    local function getNearestGen()
+        local nearest, dist = nil, math.huge
+        local char = LocalPlayer.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return nil end
+        local hrpPos = char.HumanoidRootPart.Position
+
+        for _, v in pairs(workspace.Map.Ingame.Map:GetChildren()) do
+            if v.Name == "Generator" then
+                local progress = v:FindFirstChild("Progress")
+                if progress and progress.Value < 100 then
+                    local genPart = v:FindFirstChild("Main") or v:FindFirstChildWhichIsA("BasePart")
+                    if genPart then
+                        local d = (genPart.Position - hrpPos).Magnitude
+                        if d < dist then
+                            dist = d
+                            nearest = v
+                        end
+                    end
+                end
+            end
+        end
+        return nearest
+    end
+
+    task.spawn(function()
+        while run do
+            if not isDoingGen() then
+                local gen = getNearestGen()
+                if gen and not debounce[gen] then
+                    local genPart = gen:FindFirstChild("Main") or gen:FindFirstChildWhichIsA("BasePart")
+                    if genPart then
+                        tweenTo(genPart.Position + Vector3.new(0,3,0))
+
+                        pressE(HOLD_E_TIME)
+
+                        local remote = gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE")
+                        if remote then
+                            remote:FireServer()
+                        end
+
+                        debounce[gen] = true
+                        task.delay(GEN_COOLDOWN, function()
+                            debounce[gen] = nil
+                        end)
+
+                        repeat task.wait(0.2) until not isDoingGen()
+                    end
+                end
+            end
+            task.wait(0.2)
+        end
+    end)
+end
+
+StopButton.MouseButton1Click:Connect(function()
+    run = false
+    AutoFarmSurvivorsActive = false
+    StopButton.Visible = false
+    do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3" local f="tmp_github_sound.mp3" writefile(f,game:HttpGet(url)) local s=Instance.new("Sound",workspace) s.SoundId=(getcustomasset or getsynasset)(f) s.Volume=10 s:Play() WindUI:Notify({Title="STOPPED",Content="Auto Farm survivors disabled!!",Duration=3,Icon="info"}) end
+end)
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
+
+local AutoChaseConnection
+local activeTween
+local lastQ = tick() - 18.5
+local lastE = tick() - 40
+local lastR = tick() - 30
+local lastRT = tick() - 1.9
+
+local function autoChaseNearestSurvivor(state, Window)
+    -- Only open dialog when switching from false -> true
+    if not previousState and state then
+        local Dialog = Window:Dialog({
+            Icon = "message-circle-warning",
+            Title = "WARNING",
+            Content = "This is highly banable are u sure u wanna use this?",
+            Buttons = {
+                {
+                    Title = "Yes I am sure",
+                    Callback = function()
+                        KillerAutoFarm = state
+                        
+                        if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Auto farm Enabled!!!",Duration=3,Icon="info"}) end
+
+                        if AutoChaseConnection then
+                            AutoChaseConnection:Disconnect()
+                            AutoChaseConnection = nil
+                        end
+
+                        AutoChaseConnection = RunService.RenderStepped:Connect(function()
+                            if not KillerAutoFarm then return end
+
+                            local char = LocalPlayer.Character
+                            if not char then return end
+                            local hrp = char:FindFirstChild("HumanoidRootPart")
+                            if not hrp then return end
+
+                            local nearest, dist = nil, math.huge
+                            local survivorsFolder = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
+                            if survivorsFolder then
+                                for _, survivor in pairs(survivorsFolder:GetChildren()) do
+                                    if survivor:IsA("Model") and survivor:FindFirstChild("HumanoidRootPart") then
+                                        local d = (survivor.HumanoidRootPart.Position - hrp.Position).Magnitude
+                                        if d < dist then
+                                            dist = d
+                                            nearest = survivor
+                                        end
+                                    end
+                                end
+                            end
+
+                            if nearest then
+                                camera.CFrame = CFrame.new(camera.CFrame.Position, nearest.HumanoidRootPart.Position)
+
+                                if activeTween then activeTween:Cancel() end
+                                local targetPos = nearest.HumanoidRootPart.Position - nearest.HumanoidRootPart.CFrame.LookVector * 2
+                                activeTween = TweenService:Create(hrp, TweenInfo.new(0.15, Enum.EasingStyle.Linear), {CFrame = CFrame.new(targetPos)})
+                                activeTween:Play()
+
+                                local function pressKey(key)
+                                    VirtualInputManager:SendKeyEvent(true, key, false, nil)
+                                    task.wait(0.05)
+                                    VirtualInputManager:SendKeyEvent(false, key, false, nil)
+                                end
+
+                                if tick() - lastRT >= 1.9 then
+                                    pressKey(Enum.KeyCode.ButtonR2)
+                                    lastRT = tick()
+                                end
+                                if tick() - lastQ >= 18.5 then
+                                    pressKey(Enum.KeyCode.Q)
+                                    lastQ = tick()
+                                end
+                                if tick() - lastE >= 40 then
+                                    pressKey(Enum.KeyCode.E)
+                                    lastE = tick()
+                                end
+                                if tick() - lastR >= 30 then
+                                    if math.random(1, 100) <= 17 then
+                                        pressKey(Enum.KeyCode.R)
+                                    end
+                                    lastR = tick()
+                                end
+                            elseif activeTween then
+                                activeTween:Cancel()
+                            end
+                        end)
+                    end,
+                },
+                {
+                    Title = "Cancel",
+                    Callback = function()
+                        print("Cancelled!")
+                    end,
+                },
+            },
+        })
+    else
+        -- If state is false, just turn off the farm
+        KillerAutoFarm = state
+        if AutoChaseConnection then
+            AutoChaseConnection:Disconnect()
+            AutoChaseConnection = nil
+        end
+    end
+
+    previousState = state -- update previous state
+end
+
+
+
+local function autoDodge(state)
+    isDodging = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Mui Mode Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local player = game.Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    local humanoid = char:WaitForChild("Humanoid")
+
+    if not isDodging then return end
+
+    local activeDodges = {} -- track currently dodging animations
+
+    humanoid.AnimationPlayed:Connect(function(track)
+        if not isDodging then return end
+        local animId = track.Animation.AnimationId
+
+        for _, blockAnim in ipairs(AnimToBlock) do
+            if animId == blockAnim and not activeDodges[animId] then
+                activeDodges[animId] = true
+
+                -- Start dodge loop
+                task.spawn(function()
+                    while isDodging and track.IsPlaying do
+                        local dodgeDirection = Vector3.new(math.random(0,1) == 0 and -5 or 5, 0, 0)
+                        hrp.CFrame = hrp.CFrame + dodgeDirection
+                        task.wait(0.05)
+                    end
+                    activeDodges[animId] = nil -- reset when animation ends
+                end)
+
+                break
+            end
+        end
+    end)
+end
+
+local Players = game:GetService("Players")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local LocalPlayer = Players.LocalPlayer
+local lastUsed = 0
+local tpLoopConnection
+
+local function tpBehindKiller(state)
+    BackstabActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Backstab [beta] Enabled!!!",Duration=3,Icon="info"}) end
+    
+    if tpLoopConnection then
+        tpLoopConnection:Disconnect()
+        tpLoopConnection = nil
+    end
+
+    if not state then return end
+
+    -- Create GUI
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local screenGui = Instance.new("ScreenGui", playerGui)
+    screenGui.Name = "TpToKillerGui"
+
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 140, 0, 40)
+    button.Position = UDim2.new(0.5, -70, 0.9, 0)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBlack
+    button.Text = "TP Behind Killer"
+    button.Parent = screenGui
+
+    button.MouseButton1Click:Connect(function()
+        if tick() - lastUsed < 30 then return end
+        lastUsed = tick()
+
+        local killer = workspace:FindFirstChild("Players") and workspace.Players:FindFirstChild("Killers")
+        if killer then
+            local killerModel = killer:FindFirstChildOfClass("Model")
+            local char = LocalPlayer.Character
+            if killerModel and char and char:FindFirstChild("HumanoidRootPart") and killerModel:FindFirstChild("HumanoidRootPart") then
+                local hrp = char.HumanoidRootPart
+                local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+                local killerHRP = killerModel.HumanoidRootPart
+
+                -- Simulate freeze while pressing W
+                humanoid.WalkSpeed = 0
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, nil)
+                task.wait(2)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, nil)
+                humanoid.WalkSpeed = 16
+
+                -- Tween-like teleport behind killer
+                local behindPos = killerHRP.Position - killerHRP.CFrame.LookVector * 4
+                local steps = 15
+                for i = 1, steps do
+                    hrp.CFrame = hrp.CFrame:Lerp(CFrame.new(behindPos), i/steps)
+                    task.wait(0.01)
+                end
+
+                -- Press E
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, nil)
+
+                -- Press Q 3 times
+                for _ = 1, 3 do
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Q, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Q, false, nil)
+                    task.wait(0.05)
+                end
+            end
+        end
+    end)
+end
+
+local function detectTwoTimeBehind(state)
+    IsTwoTimeBackstabDetectorActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Anti Backstab Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    local connection
+
+    local function updateCharacterRefs()
+        Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    end
+
+    LocalPlayer.CharacterAdded:Connect(function()
+        task.wait(1)
+        updateCharacterRefs()
+    end)
+
+    if not isTwoTimeLookBackActive then
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+        return
+    end
+
+    connection = RunService.Heartbeat:Connect(function()
+        if not isTwoTimeLookBackActive then return end
+
+        local twoTime = workspace:FindFirstChild("TwoTime")
+        if twoTime and twoTime:IsA("Model") and twoTime:FindFirstChild("HumanoidRootPart") then
+            local directionToTwoTime = (twoTime.HumanoidRootPart.Position - HumanoidRootPart.Position).Unit
+            local backDirection = -HumanoidRootPart.CFrame.LookVector
+            local distance = (twoTime.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
+            local dot = backDirection:Dot(directionToTwoTime)
+
+            if distance <= 10 and dot > 0.7 then
+                -- Face the model
+                local yourPos = HumanoidRootPart.Position
+                local targetPos = twoTime.HumanoidRootPart.Position
+                HumanoidRootPart.CFrame = CFrame.lookAt(yourPos, targetPos)
+            end
+        end
+    end)
+end
+
+local function HitboxExpander(state)
+    BigAhhHitbox = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Hitbox Expander Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local connections = {}
+
+    if not BigAhhHitbox then
+        for _, conn in pairs(connections) do
+            conn:Disconnect()
+        end
+        table.clear(connections)
+        return
+    end
+
+    repeat task.wait() until game:IsLoaded()
+
+    local Players = game:GetService('Players')
+    local Player = Players.LocalPlayer
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Humanoid = Character:WaitForChild("Humanoid")
+    local Animator = Humanoid:WaitForChild("Animator")
+    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    Player.CharacterAdded:Connect(function(NewCharacter)
+        Character = NewCharacter
+        Humanoid = Character:WaitForChild("Humanoid")
+        Animator = Humanoid:WaitForChild("Animator")
+        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    end)
+
+    local AttackAnimations = {
+        "rbxassetid://131430497821198", "rbxassetid://83829782357897", "rbxassetid://126830014841198",
+        "rbxassetid://126355327951215", "rbxassetid://121086746534252", "rbxassetid://105458270463374",
+        "rbxassetid://127172483138092", "rbxassetid://18885919947", "rbxassetid://18885909645",
+        "rbxassetid://87259391926321", "rbxassetid://106014898528300", "rbxassetid://86545133269813",
+        "rbxassetid://89448354637442", "rbxassetid://90499469533503", "rbxassetid://116618003477002",
+        "rbxassetid://106086955212611", "rbxassetid://107640065977686", "rbxassetid://77124578197357",
+        "rbxassetid://101771617803133", "rbxassetid://134958187822107", "rbxassetid://111313169447787",
+        "rbxassetid://71685573690338", "rbxassetid://129843313690921", "rbxassetid://97623143664485",
+        "rbxassetid://136007065400978", "rbxassetid://86096387000557", "rbxassetid://108807732150251",
+        "rbxassetid://138040001965654", "rbxassetid://73502073176819", "rbxassetid://86709774283672",
+        "rbxassetid://140703210927645", "rbxassetid://96173857867228", "rbxassetid://121255898612475",
+        "rbxassetid://98031287364865", "rbxassetid://119462383658044", "rbxassetid://77448521277146",
+        "rbxassetid://103741352379819", "rbxassetid://131696603025265", "rbxassetid://122503338277352",
+        "rbxassetid://97648548303678", "rbxassetid://94162446513587", "rbxassetid://84426150435898",
+        "rbxassetid://93069721274110", "rbxassetid://114620047310688", "rbxassetid://97433060861952",
+        "rbxassetid://82183356141401", "rbxassetid://100592913030351", "rbxassetid://121293883585738",
+        "rbxassetid://70447634862911", "rbxassetid://92173139187970", "rbxassetid://106847695270773",
+        "rbxassetid://125403313786645", "rbxassetid://81639435858902", "rbxassetid://137314737492715",
+        "rbxassetid://120112897026015", "rbxassetid://82113744478546", "rbxassetid://118298475669935",
+        "rbxassetid://126681776859538", "rbxassetid://129976080405072", "rbxassetid://109667959938617",
+        "rbxassetid://74707328554358", "rbxassetid://133336594357903", "rbxassetid://86204001129974",
+        "rbxassetid://124243639579224", "rbxassetid://70371667919898", "rbxassetid://131543461321709",
+        "rbxassetid://136323728355613", "rbxassetid://109230267448394"
+    }
+
+    local RNG = Random.new()
+    table.insert(connections, game:GetService("RunService").Heartbeat:Connect(function()
+        if not HumanoidRootPart then return end
+
+        local playing = false
+        for _, v in Humanoid:GetPlayingAnimationTracks() do
+            if table.find(AttackAnimations, v.Animation.AnimationId) and (v.TimePosition / v.Length < 0.75) then
+                playing = true
+            end
+        end
+
+        if not playing then return end
+
+        local Target
+        local NearestDist = 400
+
+        local function loop(t)
+            for _, v in t do
+                if v == Character or not v:FindFirstChild("HumanoidRootPart") then continue end
+                local Dist = (v.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
+                if Dist < NearestDist then
+                    NearestDist = Dist
+                    Target = v
+                end
+            end
+        end
+
+        loop(workspace.Players:GetDescendants())
+        loop(workspace.Map:FindFirstChild("NPCs", true):GetChildren())
+
+        if not Target then return end
+
+        local OldVelocity = HumanoidRootPart.Velocity
+        local NeededVelocity = (
+            Target.HumanoidRootPart.Position + Vector3.new(RNG:NextNumber(-1.5, 1.5), 0, RNG:NextNumber(-1.5, 1.5)) +
+            (Target.HumanoidRootPart.Velocity * (Player:GetNetworkPing() * 1.25))
+            - HumanoidRootPart.Position
+        ) / (Player:GetNetworkPing() * 2)
+
+        HumanoidRootPart.Velocity = NeededVelocity
+        game:GetService("RunService").RenderStepped:Wait()
+        HumanoidRootPart.Velocity = OldVelocity
+    end))
+end
+
+local function setCrosshair(state)
+    CrosshairVisible = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Crosshair Enabled!!!",Duration=3,Icon="info"}) end
+
+    local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local existing = playerGui:FindFirstChild("AimCursor")
+    if existing then
+        existing:Destroy()
+    end
+
+    if not state then return end
+
+    local aimGui = Instance.new("ScreenGui")
+    aimGui.Name = "AimCursor"
+    aimGui.ResetOnSpawn = false
+    aimGui.IgnoreGuiInset = true
+    aimGui.Parent = playerGui
+
+    local crosshair = Instance.new("ImageLabel")
+    crosshair.Name = "CrosshairImage"
+    crosshair.Size = UDim2.new(0, 30, 0, 30) -- Adjust size as needed
+    crosshair.Position = UDim2.new(0.5, -15, 0.5, -15)
+    crosshair.BackgroundTransparency = 1
+    crosshair.Image = "rbxassetid://140395381212329"
+    crosshair.Parent = aimGui
+end
+
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local AutoParryConnection
+
+local function autoParry(state)
+    AutoParryActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Auto parry Enabled!!!",Duration=3,Icon="info"}) end
+
+    local player = Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humRoot = char:WaitForChild("HumanoidRootPart")
+
+    if char.Name ~= "Guest1337" and state then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "Not Guest1337 or glitch",
+            Duration = 5
+        })
+        return
+    end
+
+    if AutoParryConnection then
+        AutoParryConnection:Disconnect()
+        AutoParryConnection = nil
+    end
+
+    if not state then return end
+
+    local lastUsed = 0
+
+    AutoParryConnection = RunService.Heartbeat:Connect(function()
+        if tick() - lastUsed < 24 then return end
+
+        for _, enemy in pairs(workspace.Players:GetDescendants()) do
+            if enemy:IsA("Model") and enemy ~= char and enemy:FindFirstChild("HumanoidRootPart") then
+                local dist = (humRoot.Position - enemy.HumanoidRootPart.Position).Magnitude
+                if dist < 7 then
+                    local humanoid = enemy:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        for _, anim in pairs(humanoid:GetPlayingAnimationTracks()) do
+                            if table.find(AnimToBlock, anim.Animation.AnimationId) then
+                                lastUsed = tick()
+                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Q, false, nil)
+                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Q, false, nil)
+                                task.wait(0.15)
+                                for _ = 1, 3 do
+                                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, nil)
+                                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, nil)
+                                    task.wait(0.025)
+                                end
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function disableSlowness(state)
+    NoSlowness = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Disable Slowness is Enabled!!!",Duration=3,Icon="info"}) end
+
+    if not NoSlowness then return end
+
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    local success, SlownessModule = pcall(function()
+        return require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("StatusEffects"):WaitForChild("Slowness"))
+    end)
+
+    if success and SlownessModule then
+        SlownessModule.Applied = function() end
+        SlownessModule.Removed = function() end
+    end
+
+    local function removeModifiers()
+        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            for _, modifier in pairs(humanoid:GetChildren()) do
+                if modifier.Name == "SlownessStatus" or modifier.Name == "SpeedMultiplier" then
+                    modifier:Destroy()
+                end
+            end
+        end
+    end
+
+    removeModifiers()
+    LocalPlayer.CharacterAdded:Connect(function()
+        if NoSlowness then
+            task.wait(1)
+            removeModifiers()
+        end
+    end)
+end
+
+local function YutaIsActivated(state)
+    YutaActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="PAIN IS Enabled!!!",Duration=3,Icon="info"}) end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local customizationData = {
+        Clothes = {
+            Shirt = 14160558081,
+            Pants = 14160562357
+        }
+    }
+
+    if not state then
+        local shirt = character:FindFirstChildOfClass("Shirt")
+        if shirt then shirt:Destroy() end
+
+        local pants = character:FindFirstChildOfClass("Pants")
+        if pants then pants:Destroy() end
+
+        return
+    end
+
+    if customizationData.Clothes.Shirt then
+        local shirt = character:FindFirstChildOfClass("Shirt") or Instance.new("Shirt")
+        shirt.ShirtTemplate = "rbxassetid://" .. tostring(customizationData.Clothes.Shirt)
+        shirt.Parent = character
+    end
+
+    if customizationData.Clothes.Pants then
+        local pants = character:FindFirstChildOfClass("Pants") or Instance.new("Pants")
+        pants.PantsTemplate = "rbxassetid://" .. tostring(customizationData.Clothes.Pants)
+        pants.Parent = character
+    end
+end
+
+local function toggleHighlightGen(state)
+    isHighlightActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Gen Highlighter Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local function applyGeneratorHighlight(generator)
+        if generator.Name == "Generator" then
+            local existingHighlight = generator:FindFirstChild("GeneratorHighlight")
+            local existingBillboard = generator:FindFirstChild("GeneratorBillboard")
+            local progress = generator:FindFirstChild("Progress")
+
+            if isHighlightActive then
+                -- Highlight
+                if not existingHighlight then
+                    local genhighlight = Instance.new("Highlight")
+                    genhighlight.Name = "GeneratorHighlight"
+                    genhighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    genhighlight.FillColor = Color3.fromRGB(255, 0, 0)
+                    genhighlight.Parent = generator
+                end
+
+                -- Billboard
+                if not existingBillboard and generator:IsA("Model") and generator:FindFirstChild("Main") then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "GeneratorBillboard"
+                    billboard.Size = UDim2.new(0, 120, 0, 50) -- taller to fit distance
+                    billboard.AlwaysOnTop = true
+                    billboard.StudsOffset = Vector3.new(0, 3, 0)
+                    billboard.Adornee = generator.Main
+                    billboard.Parent = generator
+
+                    -- Main label
+                    local label = Instance.new("TextLabel")
+                    label.Size = UDim2.new(1, 0, 0.6, 0)
+                    label.Position = UDim2.new(0, 0, 0, 0)
+                    label.BackgroundTransparency = 1
+                    label.Text = "Generator"
+                    label.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    label.TextStrokeTransparency = 0
+                    label.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    label.Font = Enum.Font.Arcade
+                    label.TextScaled = true
+                    label.Parent = billboard
+
+                    -- Distance label (below main)
+                    local distanceLabel = Instance.new("TextLabel")
+                    distanceLabel.Size = UDim2.new(1, 0, 0.4, 0)
+                    distanceLabel.Position = UDim2.new(0, 0, 0.6, 0)
+                    distanceLabel.BackgroundTransparency = 1
+                    distanceLabel.Font = Enum.Font.Arcade
+                    distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    distanceLabel.TextStrokeTransparency = 0
+                    distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    distanceLabel.TextScaled = true
+                    distanceLabel.Parent = billboard
+
+                    -- Update distance
+                    game:GetService("RunService").RenderStepped:Connect(function()
+                        local playerHRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if playerHRP then
+                            local dist = (generator:GetPivot().Position - playerHRP.Position).Magnitude
+                            distanceLabel.Text = string.format("Distance: %.1f studs", dist)
+                        end
+                    end)
+                end
+            else
+                if existingHighlight then existingHighlight:Destroy() end
+                if existingBillboard then existingBillboard:Destroy() end
+                return
+            end
+
+            -- Handle generator completion
+            if progress then
+                progress:GetPropertyChangedSignal("Value"):Connect(function()
+                    if progress.Value == 100 then
+                        local highlight = generator:FindFirstChild("GeneratorHighlight")
+                        local billboard = generator:FindFirstChild("GeneratorBillboard")
+                        if highlight then highlight:Destroy() end
+                        if billboard then billboard:Destroy() end
+                    elseif isHighlightActive and not generator:FindFirstChild("GeneratorHighlight") then
+                        local genhighlight = Instance.new("Highlight")
+                        genhighlight.Name = "GeneratorHighlight"
+                        genhighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                        genhighlight.FillColor = Color3.fromRGB(255, 0, 0)
+                        genhighlight.Parent = generator
+                    end
+                end)
+            end
+        end
+    end
+
+    -- Apply to existing generators
+    for _, v in pairs(game.Workspace.Map.Ingame.Map:GetChildren()) do
+        applyGeneratorHighlight(v)
+    end
+
+    -- Listen for new generators
+    game.Workspace.Map.Ingame.Map.ChildAdded:Connect(function(child)
+        applyGeneratorHighlight(child)
+    end)
+end
+
+local function Do1x1x1x1Popups()
+    AutoPopUp = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Auto 1x4 popup is onned!!!",Duration=3,Icon="info"}) end
+    
+    while true do
+        if Do1x1PopupsLoop then
+            local player = game:GetService("Players").LocalPlayer
+            local popups = player.PlayerGui.TemporaryUI:GetChildren()
+
+            for _, i in ipairs(popups) do
+                if i.Name == "1x1x1x1Popup" then
+                    local centerX = i.AbsolutePosition.X + (i.AbsoluteSize.X / 2)
+                    local centerY = i.AbsolutePosition.Y + (i.AbsoluteSize.Y / 2)
+
+                    VirtualBallsManager:SendMouseButtonEvent(centerX, centerY, Enum.UserInputType.MouseButton1.Value, true, player.PlayerGui, 1)
+                    VirtualBallsManager:SendMouseButtonEvent(centerX, centerY, Enum.UserInputType.MouseButton1.Value, false, player.PlayerGui, 1)
+                end
+            end
+        end
+        task.wait(0.1)
+    end
+end
+
+local function highlighttools(state)
+    toolhighlightActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Tool Highlighter Enabled!!!",Duration=3,Icon="info"}) end
+
+    local function applyHighlight(tool)
+        if toolhighlightActive then
+            local existingHighlight = tool:FindFirstChild("ToolHighlight")
+            local existingBillboard = tool:FindFirstChild("ToolBillboard")
+
+            if not existingHighlight then
+                local toolHighlight = Instance.new("Highlight")
+                toolHighlight.Name = "ToolHighlight"
+                toolHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                toolHighlight.FillColor = Color3.fromRGB(173, 216, 230) -- Light Blue
+                toolHighlight.Parent = tool
+            end
+
+            if not existingBillboard then
+                local billboard = Instance.new("BillboardGui")
+                billboard.Name = "ToolBillboard"
+                billboard.Size = UDim2.new(0, 120, 0, 50)
+                billboard.StudsOffset = Vector3.new(0, 2, 0)
+                billboard.AlwaysOnTop = true
+                billboard.Parent = tool
+
+                -- Name label (main text)
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Size = UDim2.new(1, 0, 0.6, 0)
+                textLabel.Position = UDim2.new(0, 0, 0, 0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.TextStrokeTransparency = 0
+                textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                textLabel.TextColor3 = Color3.fromRGB(173, 216, 230)
+                textLabel.Font = Enum.Font.Arcade
+                textLabel.TextScaled = true
+                textLabel.Text = tool.Name == "Medkit" and "Medkit" or (tool.Name == "BloxyCola" and "Bloxy Cola" or tool.Name)
+                textLabel.Parent = billboard
+
+                -- Distance label (bottom right)
+                local distanceLabel = Instance.new("TextLabel")
+                distanceLabel.Size = UDim2.new(0.5, 0, 0.4, 0)
+                distanceLabel.Position = UDim2.new(0.5, 0, 0.6, 0)
+                distanceLabel.BackgroundTransparency = 1
+                distanceLabel.Font = Enum.Font.Arcade
+                distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                distanceLabel.TextStrokeTransparency = 0
+                distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                distanceLabel.TextScaled = true
+                distanceLabel.TextXAlignment = Enum.TextXAlignment.Right
+                distanceLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                distanceLabel.Parent = billboard
+
+                -- Update distance
+                game:GetService("RunService").RenderStepped:Connect(function()
+                    local playerHRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    if playerHRP then
+                        local dist = (tool.Position - playerHRP.Position).Magnitude
+                        distanceLabel.Text = string.format("%.1f studs", dist)
+                    end
+                end)
+            end
+        else
+            local existingHighlight = tool:FindFirstChild("ToolHighlight")
+            if existingHighlight then
+                existingHighlight:Destroy()
+            end
+            local existingBillboard = tool:FindFirstChild("ToolBillboard")
+            if existingBillboard then
+                existingBillboard:Destroy()
+            end
+        end
+    end
+
+    -- Apply to existing tools
+    for _, v in pairs(game.Workspace.Map.Ingame:GetChildren()) do
+        if v:IsA("Tool") then
+            applyHighlight(v)
+        end
+    end
+
+    -- Apply to newly added tools
+    game.Workspace.Map.Ingame.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            applyHighlight(child)
+        end
+    end)
+end
+
+local function survivorHighlighter(state)
+    isSurvivorHighlightActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Survivors Highlighter Enabled!!!",Duration=3,Icon="info"}) end
+
+    local function applySurvivorHighlight(model)
+        if model:IsA("Model") and model:FindFirstChild("Head") and model:FindFirstChild("Humanoid") then
+            local existingBillboard = model.Head:FindFirstChild("billboard")
+            local existingHighlight = model:FindFirstChild("HiThere")
+            local humanoid = model:FindFirstChild("Humanoid")
+
+            if isSurvivorHighlightActive then
+                if not existingBillboard then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "billboard"
+                    billboard.Size = UDim2.new(0, 120, 0, 50)
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.AlwaysOnTop = true
+                    billboard.Parent = model.Head
+
+                    -- Main text (name)
+                    local nameLabel = Instance.new("TextLabel")
+                    nameLabel.Size = UDim2.new(1, 0, 0.6, 0)
+                    nameLabel.Position = UDim2.new(0, 0, 0, 0)
+                    nameLabel.BackgroundTransparency = 1
+                    nameLabel.TextStrokeTransparency = 0
+                    nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    nameLabel.TextColor3 = Color3.fromRGB(144, 238, 144)
+                    nameLabel.Font = Enum.Font.Arcade
+                    nameLabel.TextScaled = true
+                    nameLabel.Text = model.Name
+                    nameLabel.Parent = billboard
+
+                    -- Distance label (bottom right)
+                    local distanceLabel = Instance.new("TextLabel")
+                    distanceLabel.Size = UDim2.new(0.5, 0, 0.4, 0)
+                    distanceLabel.Position = UDim2.new(0.5, 0, 0.6, 0)
+                    distanceLabel.BackgroundTransparency = 1
+                    distanceLabel.Font = Enum.Font.Arcade
+                    distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    distanceLabel.TextStrokeTransparency = 0
+                    distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    distanceLabel.TextScaled = true
+                    distanceLabel.TextXAlignment = Enum.TextXAlignment.Right
+                    distanceLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                    distanceLabel.Parent = billboard
+
+                    -- Health label (bottom left)
+                    local healthLabel = Instance.new("TextLabel")
+                    healthLabel.Size = UDim2.new(0.5, 0, 0.4, 0)
+                    healthLabel.Position = UDim2.new(0, 0, 0.6, 0)
+                    healthLabel.BackgroundTransparency = 1
+                    healthLabel.Font = Enum.Font.Arcade
+                    healthLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                    healthLabel.TextStrokeTransparency = 0
+                    healthLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    healthLabel.TextScaled = true
+                    healthLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    healthLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                    healthLabel.Parent = billboard
+
+                    -- Update distance and health
+                    game:GetService("RunService").RenderStepped:Connect(function()
+                        local playerHRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if playerHRP and humanoid then
+                            local dist = (model.Head.Position - playerHRP.Position).Magnitude
+                            distanceLabel.Text = string.format("%.1f studs", dist)
+
+                            local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth * 100, 0, 100)
+                            healthLabel.Text = string.format("%.0f%%", healthPercent)
+                        end
+                    end)
+                end
+
+                if not existingHighlight then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "HiThere"
+                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    highlight.Parent = model
+                end
+            else
+                if existingBillboard then
+                    existingBillboard:Destroy()
+                end
+                if existingHighlight then
+                    existingHighlight:Destroy()
+                end
+            end
+        end
+    end
+
+    for _, v in pairs(game.Workspace.Players.Survivors:GetChildren()) do
+        applySurvivorHighlight(v)
+    end
+
+    game.Workspace.Players.Survivors.ChildAdded:Connect(function(child)
+        applySurvivorHighlight(child)
+    end)
+end
+
+local function givemesomepizza(state)
+    AutoTakePizza = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Tp to pizza Enabled!!!",Duration=3,Icon="info"}) end
+    
+    if not state then
+        for _, v in pairs(connections) do
+            v:Disconnect()
+        end
+        table.clear(connections)
+        return
+    end
+
+    local function tp(child)
+        if child:IsA("BasePart") and child.Name == "Pizza" then
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    child.CFrame = hrp.CFrame
+                end
+            end
+        end
+    end
+end
+
+local function autogen(state)
+    run = state
+    local debounce = {}
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Auto Gen is Enabled!!!",Duration=3,Icon="info"}) end
+
+    while run do
+        for _, v in pairs(game.Workspace.Map.Ingame.Map:GetChildren()) do
+            if v.Name == "Generator" and not debounce[v] then
+                debounce[v] = true
+
+                local remoteEvent = v:FindFirstChild("Remotes") and v.Remotes:FindFirstChild("RE")
+                if remoteEvent then
+                    remoteEvent:FireServer()
+                end
+
+                task.delay(1, function() -- individual generator cooldown
+                    debounce[v] = nil
+                end)
+            end
+        end
+
+        task.wait(2)
+    end
+end
+
+local function corruptnatureesp(state)
+    isCorruptNatureEspActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="C00lkidds util is onnnedd!!!",Duration=3,Icon="info"}) end
+
+    for _, v in pairs(game.Workspace.Map.Ingame:GetChildren()) do
+        if v:IsA("Model") then
+            local existingHighlight = v:FindFirstChild("CorruptNatureHighlight")
+
+            if isCorruptNatureEspActive then
+                if not existingHighlight then
+                    if v.Name == "HumanoidRootProjectile"
+                    or v.Name == "PizzaDeliveryRig"
+                    or v.Name == "Bunny"
+                    or v.Name == "Mafiaso1"
+                    or v.Name == "Mafiaso2"
+                    or v.Name == "Mafiaso3" then
+
+                        local highlight = Instance.new("Highlight")
+                        highlight.Name = "CorruptNatureHighlight"
+                        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                        highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                        highlight.Parent = v
+                    end
+                end
+            else 
+                if existingHighlight then
+                    existingHighlight:Destroy()
+                end
+            end
+        end
+    end
+end
+
+local function survivorutilesp(state)
+    isSurvivorUtilEspActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Survivor Util highlighter Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local targetColor = Color3.fromRGB(255, 255, 255)
+
+    local function applySurvivorUtilHighlight(model)
+        for _, util in ipairs(survivorutil) do
+            if model.Name == util then
+                local highlight = model:FindFirstChild("SurvivorUtilHighlight")
+                local existingBillboard = model:FindFirstChild("SurvivorUtilBillboard")
+
+                if isSurvivorUtilEspActive then
+                    -- Highlight
+                    if highlight then
+                        if highlight.FillColor ~= targetColor then
+                            highlight:Destroy()
+                        end
+                    end
+                    if not highlight then
+                        local newHighlight = Instance.new("Highlight")
+                        newHighlight.Name = "SurvivorUtilHighlight"
+                        newHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                        newHighlight.FillColor = targetColor
+                        newHighlight.FillTransparency = 0.5
+                        newHighlight.Parent = model
+                    end
+
+                    -- Billboard
+                    if not existingBillboard then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "SurvivorUtilBillboard"
+                        billboard.Size = UDim2.new(0, 120, 0, 40)
+                        billboard.StudsOffset = Vector3.new(0, 2, 0)
+                        billboard.AlwaysOnTop = true
+                        billboard.Parent = model
+
+                        local nameLabel = Instance.new("TextLabel")
+                        nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                        nameLabel.BackgroundTransparency = 1
+                        nameLabel.TextStrokeTransparency = 0
+                        nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                        nameLabel.TextColor3 = targetColor
+                        nameLabel.Font = Enum.Font.Arcade
+                        nameLabel.TextScaled = true
+                        nameLabel.Text = model.Name
+                        nameLabel.Parent = billboard
+
+                        -- Distance label (bottom right)
+                        local distanceLabel = Instance.new("TextLabel")
+                        distanceLabel.Size = UDim2.new(1, 0, 0.3, 0)
+                        distanceLabel.Position = UDim2.new(0, 0, 0.7, 0)
+                        distanceLabel.BackgroundTransparency = 1
+                        distanceLabel.Font = Enum.Font.Arcade
+                        distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        distanceLabel.TextStrokeTransparency = 0
+                        distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                        distanceLabel.TextScaled = true
+                        distanceLabel.TextXAlignment = Enum.TextXAlignment.Right
+                        distanceLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                        distanceLabel.Parent = billboard
+
+                        -- Update distance
+                        game:GetService("RunService").RenderStepped:Connect(function()
+                            local playerHRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                            if playerHRP then
+                                local dist = (model:GetPivot().Position - playerHRP.Position).Magnitude
+                                distanceLabel.Text = string.format("%.1f studs", dist)
+                            end
+                        end)
+                    end
+                else
+                    if highlight then
+                        highlight:Destroy()
+                    end
+                    if existingBillboard then
+                        existingBillboard:Destroy()
+                    end
+                end
+            end
+        end
+    end
+
+    -- Initial loop
+    for _, v in pairs(game.Workspace.Map.Ingame:GetChildren()) do
+        if v:IsA("Model") or v:IsA("Part") then
+            applySurvivorUtilHighlight(v)
+        end
+    end
+
+    -- Listen for new children
+    game.Workspace.Map.Ingame.ChildAdded:Connect(function(child)
+        if child:IsA("Model") or child:IsA("Part") then
+            applySurvivorUtilHighlight(child)
+        end
+    end)
+
+    -- Continuous cleanup and validation
+    task.spawn(function()
+        while isSurvivorUtilEspActive do
+            for _, v in pairs(game.Workspace.Map.Ingame:GetChildren()) do
+                if v:IsA("Model") or v:IsA("Part") then
+                    applySurvivorUtilHighlight(v)
+                end
+            end
+            task.wait(1)
+        end
+    end)
+end
+
+local function endlessstamina(state)
+    IsEndlessStaminaActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Inf stamina is Enabled!!!",Duration=3,Icon="info"}) end
+    
+    local StaminaModule = require(game.ReplicatedStorage.Systems.Character.Game.Sprinting)
+    task.spawn(function()
+        while true do
+            task.wait(0.5)
+            pcall(function()
+                StaminaModule.StaminaLossDisabled = true
+                StaminaModule.Stamina = StaminaModule.MaxStamina
+                StaminaModule.StaminaChanged:Fire()
+            end)
+        end
+    end)
+end
+
+local function killerHighlighter(state)
+    isKillerHighlightActive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Killer highlighter Enabled!!!",Duration=3,Icon="info"}) end
+
+    local function applyKillerHighlight(model)
+        if model:IsA("Model") and model:FindFirstChild("Head") then
+            local existingBillboard = model.Head:FindFirstChild("billboard")
+            local existingHighlight = model:FindFirstChild("HiThere")
+            -- Better humanoid detection via the path in Workspace.Players.Killers
+            local humanoid = game.Workspace.Players.Killers:FindFirstChild(model.Name) and game.Workspace.Players.Killers[model.Name]:FindFirstChildOfClass("Humanoid")
+
+            if isKillerHighlightActive then
+                -- Highlight
+                if not existingHighlight then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "HiThere"
+                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    highlight.Parent = model
+                end
+
+                -- Billboard
+                if not existingBillboard then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "billboard"
+                    billboard.Size = UDim2.new(0, 120, 0, 50)
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.AlwaysOnTop = true
+                    billboard.Parent = model.Head
+
+                    -- Name label (center top)
+                    local nameLabel = Instance.new("TextLabel")
+                    nameLabel.Size = UDim2.new(1, 0, 0.6, 0)
+                    nameLabel.Position = UDim2.new(0, 0, 0, 0)
+                    nameLabel.BackgroundTransparency = 1
+                    nameLabel.Text = model.Name
+                    nameLabel.Font = Enum.Font.Arcade
+                    nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    nameLabel.TextStrokeTransparency = 0
+                    nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    nameLabel.TextScaled = true
+                    nameLabel.Parent = billboard
+
+                    -- Distance label (bottom right)
+                    local distanceLabel = Instance.new("TextLabel")
+                    distanceLabel.Size = UDim2.new(0.5, 0, 0.4, 0)
+                    distanceLabel.Position = UDim2.new(0.5, 0, 0.6, 0)
+                    distanceLabel.BackgroundTransparency = 1
+                    distanceLabel.Font = Enum.Font.Arcade
+                    distanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    distanceLabel.TextStrokeTransparency = 0
+                    distanceLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    distanceLabel.TextScaled = true
+                    distanceLabel.TextXAlignment = Enum.TextXAlignment.Right
+                    distanceLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                    distanceLabel.Parent = billboard
+
+                    -- Health label (bottom left)
+                    local healthLabel = Instance.new("TextLabel")
+                    healthLabel.Size = UDim2.new(0.5, 0, 0.4, 0)
+                    healthLabel.Position = UDim2.new(0, 0, 0.6, 0)
+                    healthLabel.BackgroundTransparency = 1
+                    healthLabel.Font = Enum.Font.Arcade
+                    healthLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    healthLabel.TextStrokeTransparency = 0
+                    healthLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    healthLabel.TextScaled = true
+                    healthLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    healthLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+                    healthLabel.Parent = billboard
+
+                    -- Update distance & health
+                    game:GetService("RunService").RenderStepped:Connect(function()
+                        local playerHRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if playerHRP then
+                            local dist = (model.Head.Position - playerHRP.Position).Magnitude
+                            distanceLabel.Text = string.format("%.1f studs", dist)
+                        end
+                        if humanoid then
+                            local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth * 100, 0, 100)
+                            healthLabel.Text = string.format("%.0f%%", healthPercent)
+                        end
+                    end)
+                end
+            else
+                -- Remove
+                if existingHighlight then existingHighlight:Destroy() end
+                if existingBillboard then existingBillboard:Destroy() end
+            end
+        end
+    end
+
+    -- Apply to existing killers
+    for _, v in pairs(game.Workspace.Players.Killers:GetChildren()) do
+        applyKillerHighlight(v)
+    end
+
+    -- Apply to new killers
+    game.Workspace.Players.Killers.ChildAdded:Connect(function(child)
+        applyKillerHighlight(child)
+    end)
+end
+
+local StarterGui = game:GetService("StarterGui")
+
+local function chanceaimbot(state)
+    chanceaim = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Chance Aimbot Enabled!!!",Duration=3,Icon="info"}) end
+
+    if game.Players.LocalPlayer.Character.Name ~= "Chance" and state then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "You are not using Chance. Turn it off or it might be a glitch.",
+            Duration = 5
+        })
+        return
+    end
+
+    if state then
+        chanceaimbotLoop = game.Players.LocalPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(child)
+            if not chanceaim then return end
+            for _, v in pairs(chanceaimbotsounds) do
+                if child.Name == v then
+                    local killer = game.Workspace.Players:FindFirstChild("Killers"):FindFirstChildOfClass("Model")
+                    if killer and killer:FindFirstChild("HumanoidRootPart") then
+                        local killerHRP = killer.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if playerHRP then
+                            local cam = workspace.CurrentCamera
+                            local originalCF = cam.CFrame
+
+                            -- Lock the camera to killer for 2.6 seconds
+                            local start = tick()
+                            while tick() - start < 2.6 do
+                                task.wait()
+                                cam.CFrame = CFrame.new(cam.CFrame.Position, killerHRP.Position)
+                                playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, killerHRP.Position)
+                            end
+
+                            -- Reset camera
+                            cam.CFrame = originalCF
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if chanceaimbotLoop then
+            chanceaimbotLoop:Disconnect()
+            chanceaimbotLoop = nil
+        end
+    end
+end
+
+local function shedaimbot(state)
+    shedaim = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Shed aimbot is onned!!!",Duration=3,Icon="info"}) end
+    
+    if game.Players.LocalPlayer.Character.Name ~= "Shedletsky" and state then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "not shed off this toggle or could be a glitch",
+            Duration = 5
+        })
+        return
+    end
+
+    if state then
+        shedloop = game.Players.LocalPlayer.Character.Sword.ChildAdded:Connect(function(child)
+            if not shedaim then return end
+            for _, v in pairs(shedaimbotsounds) do
+                if child.Name == v then
+                    local killer = game.Workspace.Players:FindFirstChild("Killers"):FindFirstChildOfClass("Model")
+                    if killer and killer:FindFirstChild("HumanoidRootPart") then
+                        local killerHRP = killer.HumanoidRootPart
+                        local cam = workspace.CurrentCamera
+                        local oldCamCFrame = cam.CFrame
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+                        if playerHRP then
+                            local startTime = tick()
+                            while tick() - startTime < 2 do
+                                task.wait()
+                                cam.CFrame = CFrame.new(cam.CFrame.Position, killerHRP.Position)
+                                playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, killerHRP.Position)
+                            end
+                            cam.CFrame = oldCamCFrame -- Reset the camera
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if shedloop then
+            shedloop:Disconnect()
+            shedloop = nil
+        end
+    end
+end
+
+local function guestaimbot(state)
+    Guestaim = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Guest Aimbot Enabled!!!",Duration=3,Icon="info"}) end
+
+    if game.Players.LocalPlayer.Character.Name ~= "Guest1337" and state then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "Not guest or glitch",
+            Duration = 5
+        })
+        return
+    end
+
+    if state then
+        shedloop = game.Players.LocalPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(child)
+            if not shedaim then return end
+
+            for _, v in pairs(guestsounds) do
+                if child.Name == v then
+                    local killersFolder = game.Workspace.Players:FindFirstChild("Killers")
+                    if killersFolder then
+                        local killer = killersFolder:FindFirstChildOfClass("Model")
+                        if killer and killer:FindFirstChild("HumanoidRootPart") then
+                            local killerHRP = killer.HumanoidRootPart
+                            local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                            if playerHRP then
+                                local originalCam = workspace.CurrentCamera.CFrame
+                                local originalChar = playerHRP.CFrame
+
+                                -- Look at killer for 1.3 seconds
+                                local start = tick()
+                                while tick() - start < 1.3 do
+                                    workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, killerHRP.Position)
+                                    playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, killerHRP.Position)
+                                    task.wait()
+                                end
+
+                                -- Restore camera and character facing
+                                workspace.CurrentCamera.CFrame = originalCam
+                                playerHRP.CFrame = originalChar
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if guestloop then
+            guestloop:Disconnect()
+            guestloop = nil
+        end
+    end
+end
+
+local function aimbot1x1x1x1(state)
+    aimbot1x1 = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="1x4 aimbot Enabled!!!",Duration=3,Icon="info"}) end
+    
+    if game.Players.LocalPlayer.Character.Name ~= "1x1x1x1" and state then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "not 1x4 or glitch",
+            Duration = 5
+        })
+        return
+    end
+    if state then
+        aimbot1x1loop = game.Players.LocalPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(child)
+            if not aimbot1x1 then return end
+            for _, v in pairs(aimbot1x1sounds) do
+                if child.Name == v then
+                    local survivors = {}
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player ~= game.Players.LocalPlayer then
+                            local character = player.Character
+                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                table.insert(survivors, character)
+                            end
+                        end
+                    end
+
+                    local nearestSurvivor = nil
+                    local shortestDistance = math.huge
+
+                    for _, survivor in pairs(survivors) do
+                        local survivorHRP = survivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if playerHRP then
+                            local distance = (survivorHRP.Position - playerHRP.Position).Magnitude
+                            if distance < shortestDistance then
+                                shortestDistance = distance
+                                nearestSurvivor = survivor
+                            end
+                        end
+                    end
+
+                    if nearestSurvivor then
+                        local nearestHRP = nearestSurvivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        local maxIterations = 100
+                        if child.Name == "rbxassetid://79782181585087" then
+                            maxIterations = 220
+                        end
+
+                        if playerHRP then
+                            local num = 1
+                            while num <= maxIterations do
+                                task.wait(0.01)
+                                num += 1
+                                workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, nearestHRP.Position)
+                                playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, nearestHRP.Position)
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if aimbot1x1loop then
+            aimbot1x1loop:Disconnect()
+            aimbot1x1loop = nil
+        end
+    end
+end
+
+local function johnaimbot(state)
+    johnaim = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="John Aimbot is Enabled!!!",Duration=3,Icon="info"}) end
+    
+    if game.Players.LocalPlayer.Character.Name ~= "JohnDoe" and state then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "Not john or glitch",
+            Duration = 5
+        })
+        return
+    end
+
+    if state then
+        johnloop = game.Players.LocalPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(child)
+            if not johnaim then return end
+            for _, v in pairs(johnaimbotsounds) do
+                if child.Name == v then
+                    local survivors = {}
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player ~= game.Players.LocalPlayer then
+                            local character = player.Character
+                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                table.insert(survivors, character)
+                            end
+                        end
+                    end
+
+                    local nearestSurvivor = nil
+                    local shortestDistance = math.huge
+
+                    for _, survivor in pairs(survivors) do
+                        local survivorHRP = survivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+                        if playerHRP then
+                            local distance = (survivorHRP.Position - playerHRP.Position).Magnitude
+                            if distance < shortestDistance then
+                                shortestDistance = distance
+                                nearestSurvivor = survivor
+                            end
+                        end
+                    end
+
+                    if nearestSurvivor then
+                        local nearestHRP = nearestSurvivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        local maxIterations = 330
+                        local num = 1
+
+                        while num <= maxIterations do
+                            task.wait(0.01)
+                            num += 1
+                            workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, nearestHRP.Position)
+                            playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, nearestHRP.Position)
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if johnloop then
+            johnloop:Disconnect()
+            johnloop = nil
+        end
+    end
+end
+
+local function jasonaimbot(state)
+    jasonaim = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Jason AimBot Enabled!!!",Duration=3,Icon="info"}) end
+    if game.Players.LocalPlayer.Character.Name ~= "Jason" and state then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Wrong Character",
+            Text = "Not Jason or glitch",
+            Duration = 5
+        })
+        return
+    end
+
+    if state then
+        jasonaimbotloop = game.Players.LocalPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(child)
+            if not jasonaim then return end
+            for _, v in pairs(jasonaimbotsounds) do
+                if child.Name == v then
+                    local survivors = {}
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        if player ~= game.Players.LocalPlayer then
+                            local character = player.Character
+                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                table.insert(survivors, character)
+                            end
+                        end
+                    end
+
+                    local nearestSurvivor = nil
+                    local shortestDistance = math.huge
+
+                    for _, survivor in pairs(survivors) do
+                        local survivorHRP = survivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+                        if playerHRP then
+                            local distance = (survivorHRP.Position - playerHRP.Position).Magnitude
+                            if distance < shortestDistance then
+                                shortestDistance = distance
+                                nearestSurvivor = survivor
+                            end
+                        end
+                    end
+
+                    if nearestSurvivor then
+                        local nearestHRP = nearestSurvivor.HumanoidRootPart
+                        local playerHRP = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        local maxIterations = 70
+                        local num = 1
+
+                        while num <= maxIterations do
+                            task.wait(0.01)
+                            num += 1
+                            playerHRP.CFrame = CFrame.lookAt(playerHRP.Position, nearestHRP.Position)
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if jasonaimbotloop then
+            jasonaimbotloop:Disconnect()
+            jasonaimbotloop = nil
+        end
+    end
+end
+
+local function activatethehakari(state)
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+    local rootPart = char:WaitForChild("HumanoidRootPart")
+
+    hakariactive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Time to dance Hakari!!!",Duration=3,Icon="info"}) end
+
+    if hakariactive then
+        humanoid.PlatformStand = true
+        humanoid.JumpPower = 0
+
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+        bodyVelocity.Velocity = Vector3.zero
+        bodyVelocity.Parent = rootPart
+
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://138019937280193"
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://87166578676888"
+        sound.Parent = rootPart
+        sound.Volume = 0.5
+        sound.Looped = true
+        sound:Play()
+
+        local effect = game.ReplicatedStorage.Assets.Emotes.HakariDance.HakariBeamEffect:Clone()
+        effect.Name = "PlayerEmoteVFX"
+        effect.CFrame = char.PrimaryPart.CFrame * CFrame.new(0, -1, -0.3)
+        effect.WeldConstraint.Part0 = char.PrimaryPart
+        effect.WeldConstraint.Part1 = effect
+        effect.Parent = char
+        effect.CanCollide = false
+
+        local args = {
+            [1] = "PlayEmote",
+            [2] = "Animations",
+            [3] = "HakariDance"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Network"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+
+        animationTrack.Stopped:Connect(function()
+            humanoid.PlatformStand = false
+            if bodyVelocity and bodyVelocity.Parent then
+                bodyVelocity:Destroy()
+            end
+        end)
+    else
+        humanoid.PlatformStand = false
+        humanoid.JumpPower = 0 
+
+        local bodyVelocity = rootPart:FindFirstChildOfClass("BodyVelocity")
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+        end
+
+        local sound = rootPart:FindFirstChildOfClass("Sound")
+        if sound then
+            sound:Stop()
+            sound:Destroy()
+        end
+
+        local effect = char:FindFirstChild("PlayerEmoteVFX")
+        if effect then
+            effect:Destroy()
+        end
+
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            if track.Animation.AnimationId == "rbxassetid://138019937280193" then
+                track:Stop()
+            end
+        end
+    end
+end
+
+local function activatethesilly(state)
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+    local rootPart = char:WaitForChild("HumanoidRootPart")
+    sillyactive = state
+
+    if sillyactive then
+        humanoid.PlatformStand = true
+        humanoid.JumpPower = 0
+    
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+        bodyVelocity.Velocity = Vector3.zero
+        bodyVelocity.Parent = rootPart
+    
+        local emoteScript = require(game:GetService("ReplicatedStorage").Assets.Emotes.Shucks)
+        emoteScript.Created({Character = char})
+    
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://74238051754912"
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+    
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://123236721947419"
+        sound.Parent = rootPart
+        sound.Volume = 0.5
+        sound.Looped = false
+        sound:Play()
+    
+        local args = {
+            [1] = "PlayEmote",
+            [2] = "Animations",
+            [3] = "Shucks"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Network"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+    
+        animationTrack.Stopped:Connect(function()
+            humanoid.PlatformStand = false
+            if bodyVelocity and bodyVelocity.Parent then
+                bodyVelocity:Destroy()
+            end
+    
+            local saw = char:FindFirstChild("Saw")
+            if saw then saw:Destroy() end
+
+            local playerHand = char:FindFirstChild("PlayerEmoteHand")
+            if playerHand then playerHand:Destroy() end
+        end)
+    else
+        humanoid.PlatformStand = false
+        humanoid.JumpPower = 0
+
+        local saw = char:FindFirstChild("Saw")
+        if saw then saw:Destroy() end
+
+        local playerHand = char:FindFirstChild("PlayerEmoteHand")
+        if playerHand then playerHand:Destroy() end
+
+        local bodyVelocity = rootPart:FindFirstChildOfClass("BodyVelocity")
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+        end
+
+        local sound = rootPart:FindFirstChildOfClass("Sound")
+        if sound then
+            sound:Stop()
+            sound:Destroy()
+        end
+
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            if track.Animation.AnimationId == "rbxassetid://74238051754912" then
+                track:Stop()
+            end
+        end
+    end
+end
+
+local function activatethequiet(state)
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+    local rootPart = char:WaitForChild("HumanoidRootPart")
+    sillyactive = state
+
+    if sillyactive then
+        humanoid.PlatformStand = true
+        humanoid.JumpPower = 0
+
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+        bodyVelocity.Velocity = Vector3.zero
+        bodyVelocity.Parent = rootPart
+
+        local emoteScript = require(game:GetService("ReplicatedStorage").Assets.Emotes.MissTheQuiet)
+        emoteScript.Created({Character = char})
+
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://100986631322204"
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://131936418953291"
+        sound.Parent = rootPart
+        sound.Volume = 0.5
+        sound.Looped = false
+        sound:Play()
+
+        local args = {
+            [1] = "PlayEmote",
+            [2] = "Animations",
+            [3] = "MissTheQuiet"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Network"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+
+        animationTrack.Stopped:Connect(function()
+            humanoid.PlatformStand = false
+            if bodyVelocity and bodyVelocity.Parent then
+                bodyVelocity:Destroy()
+            end
+
+            local assetsToDestroy = {"EmoteHatAsset", "EmoteLighting", "PlayerEmoteHand"}
+            for _, assetName in ipairs(assetsToDestroy) do
+                local asset = char:FindFirstChild(assetName)
+                if asset then asset:Destroy() end
+            end
+        end)
+    else
+        humanoid.PlatformStand = false
+        humanoid.JumpPower = 0
+
+        local assetsToDestroy = {"EmoteHatAsset", "EmoteLighting", "PlayerEmoteHand"}
+        for _, assetName in ipairs(assetsToDestroy) do
+            local asset = char:FindFirstChild(assetName)
+            if asset then asset:Destroy() end
+        end
+
+        local bodyVelocity = rootPart:FindFirstChildOfClass("BodyVelocity")
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+        end
+
+        local sound = rootPart:FindFirstChildOfClass("Sound")
+        if sound then
+            sound:Stop()
+            sound:Destroy()
+        end
+
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            if track.Animation.AnimationId == "rbxassetid://100986631322204" then
+                track:Stop()
+            end
+        end
+    end
+end
+
+local function activatethesilly2(state)
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+    local rootPart = char:WaitForChild("HumanoidRootPart")
+
+    sillyactive = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Time to dance Shucks!!!",Duration=3,Icon="info"}) end
+
+    if sillyactive then
+        humanoid.PlatformStand = true
+        humanoid.JumpPower = 0
+
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+        bodyVelocity.Velocity = Vector3.zero
+        bodyVelocity.Parent = rootPart
+
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://74238051754912"
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://123236721947419"
+        sound.Parent = rootPart
+        sound.Volume = 0.5
+        sound.Looped = false
+        sound:Play()
+
+        local args = {
+            [1] = "PlayEmote",
+            [2] = "Animations",
+            [3] = "Shucks"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Network"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+
+        animationTrack.Stopped:Connect(function()
+            humanoid.PlatformStand = false
+            if bodyVelocity and bodyVelocity.Parent then
+                bodyVelocity:Destroy()
+            end
+        end)
+    else
+        humanoid.PlatformStand = false
+        humanoid.JumpPower = 0
+
+        local bodyVelocity = rootPart:FindFirstChildOfClass("BodyVelocity")
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+        end
+
+        local sound = rootPart:FindFirstChildOfClass("Sound")
+        if sound then
+            sound:Stop()
+            sound:Destroy()
+        end
+
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            if track.Animation.AnimationId == "rbxassetid://74238051754912" then
+                track:Stop()
+            end
+        end
+    end
+end
+
+
+
+local function CustomCharacter(state)
+    CustomChar = state  -- Set the state to true/false
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="Sun Jin Woo Skin Enabled!!!",Duration=3,Icon="info"}) end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    if not state then
+        
+        for _, obj in pairs(character:GetChildren()) do
+            if obj:IsA("Accessory") or obj:IsA("Shirt") or obj:IsA("Pants") or obj:IsA("CharacterMesh") then
+                obj:Destroy()
+            end
+        end
+
+        local head = character:FindFirstChild("Head")
+        if head then
+            for _, obj in pairs(head:GetChildren()) do
+                if obj:IsA("SpecialMesh") then
+                    obj:Destroy()
+                end
+            end
+        end
+        return
+    end
+
+    
+    local AccessorySettings = {
+        RemoveOriginalAccessories = true,
+    }
+
+    local PlayerCustomization = {
+        EnableSkinToneChange = false,
+        SkinTones = {
+            Head = "Yellow",
+            Torso = "Yellow",
+            LeftArm = "Yellow",
+            RightArm = "Yellow",
+            LeftLeg = "Yellow",
+            RightLeg = "Yellow"
+        },
+        RemoveMeshes = true,
+        HeadSize = Vector3.new(1.25, 1.25, 1.25),
+        Clothes = {
+            Shirt = 14160558081,
+            Pants = 14160562357,
+        }
+    }
+
+    local Accessories = {
+        {
+            AssetID = 104982019508527,
+            AttachTo = "Torso",
+            Position = Vector3.new(0, -0.8, 0.3),
+            Rotation = Vector3.new(0, 90, 0)
+        }
+    }
+
+    
+    local function DisableCollisions(object)
+        if object:IsA("BasePart") then
+            object.CanCollide = false
+            object.CanTouch = false
+            object.CanQuery = false
+        end
+    end
+
+    local function AttachAccessories(accessoryTable)
+        if AccessorySettings.RemoveOriginalAccessories then
+            for _, obj in pairs(character:GetChildren()) do
+                if obj:IsA("Accessory") then
+                    obj:Destroy()
+                end
+            end
+        end
+
+        for _, accessoryData in pairs(accessoryTable) do
+            local item = game:GetObjects("rbxassetid://" .. tostring(accessoryData.AssetID))[1]
+            if not item then
+                warn("Failed to load item with ID: " .. tostring(accessoryData.AssetID))
+                return
+            end
+
+            if item:IsA("Tool") then
+                local newAccessory = Instance.new("Accessory")
+                local handle = item:FindFirstChildWhichIsA("Part") or item:FindFirstChildWhichIsA("MeshPart")
+
+                if handle then
+                    handle.Parent = newAccessory
+                    newAccessory.Parent = character
+                    newAccessory.Name = "ConvertedAccessory"
+                    DisableCollisions(handle)
+
+                    local targetPart = character:FindFirstChild(accessoryData.AttachTo)
+                    if targetPart then
+                        local weld = Instance.new("Weld")
+                        weld.Part0 = targetPart
+                        weld.Part1 = handle
+                        weld.C0 = CFrame.new(accessoryData.Position) * CFrame.Angles(
+                            math.rad(accessoryData.Rotation.X),
+                            math.rad(accessoryData.Rotation.Y),
+                            math.rad(accessoryData.Rotation.Z)
+                        )
+                        weld.Parent = targetPart
+                    end
+                end
+            else
+                item.Parent = character
+                local targetPart = character:FindFirstChild(accessoryData.AttachTo)
+                if targetPart then
+                    local attachPart = item:FindFirstChildWhichIsA("MeshPart") or item:FindFirstChildWhichIsA("Part")
+                    if attachPart then
+                        DisableCollisions(attachPart)
+
+                        local weld = Instance.new("Weld")
+                        weld.Part0 = targetPart
+                        weld.Part1 = attachPart
+                        weld.C0 = CFrame.new(accessoryData.Position) * CFrame.Angles(
+                            math.rad(accessoryData.Rotation.X),
+                            math.rad(accessoryData.Rotation.Y),
+                            math.rad(accessoryData.Rotation.Z)
+                        )
+                        weld.Parent = targetPart
+                    end
+                end
+            end
+        end
+    end
+
+    local function ApplySkinTone()
+        if not PlayerCustomization.EnableSkinToneChange then return end
+
+        local bodyParts = {
+            Head = "Head",
+            Torso = "Torso",
+            LeftArm = "Left Arm",
+            RightArm = "Right Arm",
+            LeftLeg = "Left Leg",
+            RightLeg = "Right Leg"
+        }
+
+        for partName, skinColor in pairs(PlayerCustomization.SkinTones) do
+            local bodyPart = character:FindFirstChild(bodyParts[partName])
+            if bodyPart and skinColor then
+                bodyPart.BrickColor = BrickColor.new(skinColor)
+            end
+        end
+    end
+
+    local function ResetCharacterMesh()
+        if PlayerCustomization.RemoveMeshes then
+            for _, obj in pairs(character:GetChildren()) do
+                if obj:IsA("CharacterMesh") then
+                    obj:Destroy()
+                end
+            end
+
+            local head = character:FindFirstChild("Head")
+            if head then
+                for _, obj in pairs(head:GetChildren()) do
+                    if obj:IsA("SpecialMesh") then
+                        obj:Destroy()
+                    end
+                end
+
+                local headMesh = Instance.new("SpecialMesh")
+                headMesh.MeshType = Enum.MeshType.Head
+                headMesh.Scale = PlayerCustomization.HeadSize
+                headMesh.Parent = head
+            end
+        end
+    end
+
+    local function ApplyClothes()
+        if PlayerCustomization.Clothes.Shirt then
+            local shirt = character:FindFirstChildOfClass("Shirt") or Instance.new("Shirt")
+            shirt.ShirtTemplate = "rbxassetid://" .. tostring(PlayerCustomization.Clothes.Shirt)
+            shirt.Parent = character
+        end
+
+        if PlayerCustomization.Clothes.Pants then
+            local pants = character:FindFirstChildOfClass("Pants") or Instance.new("Pants")
+            pants.PantsTemplate = "rbxassetid://" .. tostring(PlayerCustomization.Clothes.Pants)
+            pants.Parent = character
+        end
+    end
+
+    
+    AttachAccessories(Accessories)
+    ApplySkinTone()
+    ResetCharacterMesh()
+    ApplyClothes()
+end
+
+local function bringbackjumppower(state)
+    jumppowerenabled = state
+    
+    if state then do local url="https://github.com/Kiroscripter/Creamy-sound/raw/refs/heads/main/new-notification-010-352755.mp3";local f="tmp_github_sound.mp3";writefile(f,game:HttpGet(url));local s=Instance.new("Sound",workspace);s.SoundId=(getcustomasset or getsynasset)(f);s.Volume=10;s:Play() end;WindUI:Notify({Title="INFORMATION",Content="you can jump Now Yayyy",Duration=3,Icon="info"}) end
+
+    if jumppowerenabled then
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+    else
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
+    end
+end
+
+local function speedmulti(value)
+    game.Players.LocalPlayer.Character.SpeedMultipliers.Sprinting.Value = value
+end
+
+local function bringbackjumppowerslider(value)
+    if jumppowerenabled then
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+    else
+        return
+    end
+end
+
+local function FOVmulti(value)
+    game.Players.LocalPlayer.Character.FOVMultipliers.FOVSetting.Value = value
+end
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local function tweenToSpawn(state)
+	if not state then return end
+
+	local player = Players.LocalPlayer
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+	if not humanoid then return end
+
+	-- Freeze movement (animation still plays)
+	local oldWalkSpeed = humanoid.WalkSpeed
+	humanoid.WalkSpeed = 0
+
+	-- Tween forward (simulate holding W)
+	local forwardCFrame = hrp.CFrame + hrp.CFrame.LookVector * 3
+	local tweenForward = TweenService:Create(hrp, TweenInfo.new(2, Enum.EasingStyle.Linear), {CFrame = forwardCFrame})
+	tweenForward:Play()
+	tweenForward.Completed:Wait()
+
+	-- Restore movement
+	humanoid.WalkSpeed = oldWalkSpeed
+
+	-- Tween to spawn
+	local spawnPoint = workspace:WaitForChild("Map"):WaitForChild("Lobby"):WaitForChild("Spawn")
+	local spawnTween = TweenService:Create(hrp, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		CFrame = CFrame.new(spawnPoint.Position + Vector3.new(0, 3, 0))
+	})
+	spawnTween:Play()
+end
+
+local function watchtower(state)
+    IsWatchtowerActive = state
+
+    if not IsWatchtowerActive then
+        for _, conn in pairs(connections) do
+            conn:Disconnect()
+        end
+        table.clear(connections)
+        return
+    end
+
+    local map = workspace:FindFirstChild("Map")
+    local insession = map and map:FindFirstChild("Ingame")
+
+    if insession then
+        for _, child in pairs(insession:GetChildren()) do
+            tp(child)
+        end
+
+        table.insert(connections, insession.ChildAdded:Connect(tp))
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local Tab = Window:Tab({
+    Title = "Stamina",
+    Icon = "footprints",
+    Locked = false,
+})
+
+local Section = Tab:Section({ 
+    Title = "Stamina & more",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+local Toggle = Tab:Toggle({
+    Title = "Inf stamina",
+    Desc = "Stamina not going hehehe",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        endlessstamina(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Tp to pizza Toggle",
+    Desc = "Tp To pizza",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        givemesomepizza(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Gens",
+    Icon = "sliders-horizontal",
+    Locked = false,
+})
+local Toggle = Tab:Toggle({
+    Title = "Auto gens toggle",
+    Desc = "Auto Gens",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        autogen(state)
+    end
+})
+local Dropdown = Tab:Dropdown({
+    Title = "TP To Generator",
+    Values = {}, -- This will be filled dynamically below
+    Value = { "Nothings" },
+    Multi = false,
+    AllowNone = true,
+    Callback = function(selected)
+        task.spawn(function()
+            for _, generator in pairs(workspace.Map.Ingame:FindFirstChild("Map"):GetChildren()) do
+                if generator:IsA("Model") and generator.Name == "Generator" then
+                    local tpVal = generator:FindFirstChild("GeneratorTP")
+                    if tpVal and tpVal.Value == selected[1] then
+                        local char = game.Players.LocalPlayer.Character
+                        if char and char:FindFirstChild("HumanoidRootPart") and generator.PrimaryPart then
+                            char.HumanoidRootPart.CFrame = generator.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+                        end
+                    end
+                end
+            end
+        end)
+    end
+})
+
+-- Fill the dropdown with generator names
+task.spawn(function()
+    local values = {}
+    for _, generator in pairs(workspace.Map.Ingame:FindFirstChild("Map"):GetChildren()) do
+        if generator:IsA("Model") and generator.Name == "Generator" then
+            local tpVal = generator:FindFirstChild("GeneratorTP")
+            if tpVal and not table.find(values, tpVal.Value) then
+                table.insert(values, tpVal.Value)
+            end
+        end
+    end
+    Dropdown:SetValues(values)
+end)
+
+local RefreshDropdownButton = Tab:Button({
+    Title = "Refresh Dropdown Generator",
+    Callback = function()
+        local num = 1
+        local GenTable = {}
+
+        task.spawn(function()
+            for _, Players in pairs(workspace.Map.Ingame:FindFirstChild("Map"):GetChildren()) do
+                if Players:IsA("Model") and Players.Name == "Generator" then
+                    local label = "Generator " .. num
+                    table.insert(GenTable, label)
+
+                    if not Players:FindFirstChild("GeneratorTP") then
+                        local NewValue = Instance.new("StringValue")
+                        NewValue.Name = "GeneratorTP"
+                        NewValue.Value = label
+                        NewValue.Parent = Players
+                    end
+
+                    num += 1
+                end
+            end
+
+            DropdownTpGen:Refresh(GenTable)
+        end)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Visuals",
+    Icon = "eye",
+    Locked = false,
+})
+local Paragraph = Tab:Paragraph({
+    Title = "Important",
+    Desc = "Colour will apply if the esp is off and onned",
+    Color = "Red",
+    Image = "",
+    ImageSize = 0,
+    Thumbnail = "",
+    ThumbnailSize = 6,
+    Locked = false,
+})
+local Toggle = Tab:Toggle({
+    Title = "Esp killer",
+    Desc = "Killer Esp",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        killerHighlighter(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Gen esp toggle",
+    Desc = "Gens Esp",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        toggleHighlightGen(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Tool Esp Toggle",
+    Desc = "Tool Esp",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        highlighttools(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Survivor Esp Toggle",
+    Desc = "Survivor Esp",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        survivorHighlighter(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "coolkids util esp toggle",
+    Desc = "Corupt nature Esp",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        corruptnatureesp(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Survivor Utility Esp toggle",
+    Desc = "Esp Gens,sentry,dispenser etc",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        survivorutilesp(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Aimbot/auto",
+    Icon = "swords",
+    Locked = false,
+})
+local Section = Tab:Section({ 
+    Title = "Normal section",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+local Toggle = Tab:Toggle({
+    Title = "Auto Jason farm",
+    Desc = "Easy",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        autoChaseNearestSurvivor(state, Window)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Auto survivor farm",
+    Desc = "Easy",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        AutoFarmSurvivors(state)
+    end
+})
+local Button = Tab:Button({
+    Title = "auto 1x4 pop up",
+    Desc = "saves",
+    Locked = false,
+    Callback = function()
+        Do1x1x1x1Popups()
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Crosshair",
+    Desc = "Easy to aim recommended for mobile",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        setCrosshair(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Auto parry",
+    Desc = "Use guest or might get bugged out",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        autoParry(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Auto backstab",
+    Desc = "Use Two time dawg",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        tpBehindKiller(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Chance (buggy) aimbot",
+    Desc = "gambler aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        chanceaimbot(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Shed aimbot",
+    Desc = "chicken aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        shedaimbot(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "guest aimbot",
+    Desc = "Blue guy aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        guestaimbot(state)
+    end
+})
+local Section = Tab:Section({ 
+    Title = "buggy section",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+local Toggle = Tab:Toggle({
+    Title = "1x4 aimbot",
+    Desc = "depressed green guy aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        aimbot1x1x1x1(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "john doe aimbot",
+    Desc = "corrupted robloxian aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        johnaimbot(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "C00lkidd aimbot",
+    Desc = "Adopted child aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        game:GetService("ReplicatedStorage").Modules.Network.RemoteEvent:FireServer("SetDevice", state and "Mobile" or "PC")
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Jason aimbot (buggy)",
+    Desc = "Fair hitbox guy aimbot",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        jasonaimbot(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Emotes",
+    Icon = "laugh",
+    Locked = false,
+})
+local Toggle = Tab:Toggle({
+    Title = "Hakari dance",
+    Desc = "Yeah boyyy",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        activatethehakari(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Shucks",
+    Desc = "Yeah boyyy",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        activatethesilly2(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Skins",
+    Icon = "shirt",
+    Locked = false,
+})
+local Toggle = Tab:Toggle({
+    Title = "Sunjin woo skin",
+    Desc = "all char",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        CustomCharacter(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Yuta outfit skin",
+    Desc = "all char (cred to soul)",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        YutaIsActivated(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Settings",
+    Icon = "settings",
+    Locked = false,
+})
+local Toggle = Tab:Toggle({
+    Title = "Bring jump",
+    Desc = "yeah you can jump",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        bringbackjumppower(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "No Stun",
+    Desc = "Disables stuns",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state)
+        ActiveNoStun = state
+        task.spawn(function()
+            while ActiveNoStun do
+                task.spawn(function()
+                    local char = game.Players.LocalPlayer.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        char.HumanoidRootPart.Anchored = false
+                    end
+                end)
+                task.wait(0.001)
+            end
+        end)
+    end
+})
+local Slider = Tab:Slider({
+    Title = "JumpPower slider",
+    Step = 2,
+    Value = {
+        Min = 1,
+        Max = 600,
+        Default = 50,
+    },
+    Callback = function(value)
+        bringbackjumppowerslider(value)
+    end
+})
+local Slider = Tab:Slider({
+    Title = "sprinting speed",
+    Step = 1,
+    Value = {
+        Min = 1,
+        Max = 10,
+        Default = 2,
+    },
+    Callback = function(value)
+        speedmulti(value)
+    end
+})
+local Slider = Tab:Slider({
+    Title = "Fov",
+    Step = 1,
+    Value = {
+        Min = 3,
+        Max = 50,
+        Default = 9,
+    },
+    Callback = function(value)
+        FOVmulti(value)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Stay at lobby [beta]",
+    Desc = "Use it before one sec the game starts",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        tweenToSpawn(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "See the map",
+    Desc = "See the map from above",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        watchtower(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Hitbox Expander",
+    Desc = "works for all melee attacks",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        HitboxExpander(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Disable slowness",
+    Desc = "Disables slowness effect",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        disableSlowness(state)
+    end
+})
+local Toggle = Tab:Toggle({
+    Title = "Anti backstab",
+    Desc = "Makes u look back when two time is behind",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        detectTwoTimeBehind(state)
+    end 
+})
+local Toggle = Tab:Toggle({
+    Title = "mui Mode",
+    Desc = "Dodge every attack in sight",
+    Icon = "check",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state) 
+        autoDodge(state)
+    end
+})
+local Tab = Window:Tab({
+    Title = "Credits",
+    Icon = "github",
+    Locked = false,
+})
+local Button = Tab:Button({
+    Title = "Veux",
+    Desc = "Helped with esp",
+    Locked = false,
+    Callback = function()
+        print("Helper")
+    end
+})
+local Button = Tab:Button({
+    Title = "Soul",
+    Desc = "helped alot",
+    Locked = false,
+    Callback = function()
+        print("Helper")
+    end
+})
+local Button = Tab:Button({
+    Title = "Kiro",
+    Desc = "basically did everything",
+    Locked = false,
+    Callback = function()
+        print("Owner")
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+print("Loading Finished!")
+
+
+
+
+--Easter egg
+print("Easter Egg is here")
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local player = Players.LocalPlayer
+local resetTimes = {}
+
+player.CharacterAdded:Connect(function()
+    local now = tick()
+    table.insert(resetTimes, now)
+
+    -- Remove resets older than 45 seconds
+    for i = #resetTimes, 1, -1 do
+        if now - resetTimes[i] > 45 then
+            table.remove(resetTimes, i)
+        end
+    end
+
+    -- If 5 or more resets within 45 seconds
+    if #resetTimes >= 5 then
+        pcall(function()
+            StarterGui:SetCore("SendNotification", {
+                Title = "Ouch!!!",
+                Text = "Balls hurt",
+                Duration = 2
+            })
+        end)
+
+        resetTimes = {} -- Reset counter after message
+    end
+end)
